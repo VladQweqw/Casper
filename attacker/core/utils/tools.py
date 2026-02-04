@@ -1,14 +1,15 @@
 from scapy.all import *
+from scapy.arch.windows import get_windows_if_list
+
 import nmap
 import psutil
 import ipaddress
 
-def network_scan(network_ip, netmask='24', timeout=2, iface='eth0', verbose=False, output=False):
+def network_scan(network_ip, netmask='24', timeout=1, iface='eth0', verbose=False, output=False):
     print(f"Scanning network on {iface}...")
     ether_header = Ether(dst="ff:ff:ff:ff:ff:ff")    
     arp_header = ARP(pdst=f"{network_ip}/{netmask}")
     frame = ether_header / arp_header
-
     ans, unans = srp(frame, timeout=timeout, verbose=False, iface=iface)
 
     if not verbose:
@@ -45,11 +46,14 @@ def port_scanner(target_ip, port_range='22-443'):
 def get_interfaces():
     interfaces = []
     brief_interfaces = []
+    
+    windows_ifaces = get_windows_if_list()
 
     for iface, addrs in psutil.net_if_addrs().items():
             for addr in addrs:
                 if addr.family.name == 'AF_INET':
                     network = ipaddress.IPv4Network(f"{addr.address}/{addr.netmask}", strict=False)
+                    windows_iface_object = next((item for item in windows_ifaces if item['name'] == iface), '') 
 
                     # create a list of interfaces
                     interfaces.append({
@@ -59,9 +63,9 @@ def get_interfaces():
                         'netmask': network.netmask,
                         'netprefix': network.prefixlen,
                         'formatted': network,
+                        'windows_interface': fr"\Device\NPF_{windows_iface_object['guid']}"
                     })
 
                     brief_interfaces.append(iface)
-
 
     return interfaces, brief_interfaces

@@ -16,6 +16,7 @@ import sv_ttk
 # variables
 current_attack_option = ''
 current_interface_option = ''
+current_interface_object = {}
 
 root = tk.Tk()
 sv_ttk.set_theme('dark')
@@ -69,7 +70,7 @@ attackCombo = ttk.Combobox(
     width=30
 )
 attackCombo.place(anchor='center', relx=0.5, rely=0.2)
-
+current_attack_option = menu_options[0]
 
 # Interface dropdown
 interfacesLabel = tk.Label(
@@ -90,11 +91,14 @@ interfacesCombo = ttk.Combobox(
     width=30
 )
 interfacesCombo.place(anchor='center', relx=0.5, rely=0.2)
+current_interface_option = brief_interfaces[0]
+current_interface_object = next((item for item in interfaces if item['interface'] == current_interface_option), None)
 
 # get combobox state
 def get_current_interface(event):
+    global current_attack_option, current_interface_object
     current_interface_option = interfacesCombo.get()
-    print(interfacesCombo.get())
+    current_interface_object = next((item for item in interfaces if item['interface'] == current_interface_option), None)
 
 interfacesCombo.bind("<<ComboboxSelected>>", get_current_interface)
 
@@ -118,18 +122,24 @@ panels.clear_frame(content_frame)
 # add attack combobox listener
 def get_current_attack(event):
     current_attack_option = attackCombo.get()
-    if current_attack_option == "Network Scan":
-        panels.network_scan(content_frame, ttk)
-    elif current_attack_option == "Port Scanner": 
-        panels.port_scan(content_frame, ttk)
-    elif current_attack_option == "ARP Spoofing":
-        panels.arp_spoofing(content_frame, ttk)
-    elif current_attack_option == "ARP Spoofing (MITM)":
-        panels.dns_poison(content_frame, ttk)
-
-    print(attackCombo.get())
+    menu_options(current_attack_option)
 
 attackCombo.bind("<<ComboboxSelected>>", get_current_attack)
+
+def menu_options(option):
+    if option == "Network Scan":  
+        res = tools.network_scan(network_ip=current_interface_object['network_ip'], iface=current_interface_object['windows_interface'], output=True, verbose=True)
+
+        for send, received in res:
+            print(send, received)
+
+        panels.network_scan(content_frame, ttk)
+    elif option == "Port Scanner": 
+        panels.port_scan(content_frame, ttk)
+    elif option == "ARP Spoofing":
+        panels.arp_spoofing(content_frame, ttk)
+    elif option == "ARP Spoofing (MITM)":
+        panels.dns_poison(content_frame, ttk)
 
 # last line
 root.mainloop()
