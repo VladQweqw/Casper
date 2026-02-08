@@ -122,17 +122,12 @@ panels.clear_frame(content_frame)
 # add attack combobox listener
 def get_current_attack(event):
     current_attack_option = attackCombo.get()
-    menu_options(current_attack_option)
+    change_panel(current_attack_option)
 
 attackCombo.bind("<<ComboboxSelected>>", get_current_attack)
 
-def menu_options(option):
+def change_panel(option):
     if option == "Network Scan":  
-        res = tools.network_scan(network_ip=current_interface_object['network_ip'], iface=current_interface_object['windows_interface'], output=True, verbose=True)
-
-        for send, received in res:
-            print(send, received)
-
         panels.network_scan(content_frame, ttk)
     elif option == "Port Scanner": 
         panels.port_scan(content_frame, ttk)
@@ -140,6 +135,13 @@ def menu_options(option):
         panels.arp_spoofing(content_frame, ttk)
     elif option == "ARP Spoofing (MITM)":
         panels.dns_poison(content_frame, ttk)
+    else:
+        print('mere defaulet')
+        panels.default(content_frame, ttk)
+
+
+# display the default page initial
+change_panel('none')
 
 # last line
 root.mainloop()
