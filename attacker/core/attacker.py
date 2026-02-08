@@ -1,7 +1,7 @@
 import core.utils.attacks as attacks
 import core.utils.tools as tools
 
-from core.utils.helpers import menu_options
+from core.utils.helpers import menu_options, overall_padding
 import core.utils.panels as panels
 
 import psutil
@@ -39,12 +39,12 @@ root.columnconfigure(1, weight=1)
 
 # 3 rows
 root.rowconfigure(0, weight=0, minsize=75)
-root.rowconfigure(1, weight=1)
+root.rowconfigure(1, weight=0)
 root.rowconfigure(2, weight=1)
 
-header_frame = ttk.Frame(root, padding=10)
-attackComboFrame = ttk.Frame(root, padding=10)
-interfaceComboFrame = ttk.Frame(root, padding=10)
+header_frame = ttk.Frame(root, padding=overall_padding)
+attackComboFrame = ttk.Frame(root, padding=overall_padding)
+interfaceComboFrame = ttk.Frame(root, padding=overall_padding)
 
 header_frame.grid(row=0, column=0, sticky='nsew', columnspan=2)
 attackComboFrame.grid(row=1, column=0, sticky='nsew')
@@ -59,7 +59,7 @@ appTitle.place(relx=0.5, rely=.5, anchor="center")
 attacksLabel = tk.Label(
     attackComboFrame,
     text="Choose attack type")
-attacksLabel.pack(side='top')
+attacksLabel.grid(row=0, column=0, sticky='nswe', pady=(0, 5))
 
 attacksText = tk.StringVar(value=menu_options[0])
 attackCombo = ttk.Combobox(
@@ -69,19 +69,17 @@ attackCombo = ttk.Combobox(
     state='readonly',
     width=30
 )
-attackCombo.place(anchor='center', relx=0.5, rely=0.2)
+attackCombo.grid(row=1, column=0, sticky='ew')
 current_attack_option = menu_options[0]
 
 # Interface dropdown
 interfacesLabel = tk.Label(
     interfaceComboFrame,
     text="Choose interface")
-interfacesLabel.pack(side='top')
+interfacesLabel.grid(row=0, column=0, sticky='nwse', pady=(0, 5))
 
 # get interfaces
 interfaces, brief_interfaces = tools.get_interfaces()
-
-
 interfacesText = tk.StringVar(value=brief_interfaces[0])
 interfacesCombo = ttk.Combobox(
     interfaceComboFrame, 
@@ -90,7 +88,7 @@ interfacesCombo = ttk.Combobox(
     state='readonly',
     width=30
 )
-interfacesCombo.place(anchor='center', relx=0.5, rely=0.2)
+interfacesCombo.grid(row=1, column=0, sticky='we')
 current_interface_option = brief_interfaces[0]
 current_interface_object = next((item for item in interfaces if item['interface'] == current_interface_option), None)
 
@@ -102,9 +100,9 @@ def get_current_interface(event):
 
 interfacesCombo.bind("<<ComboboxSelected>>", get_current_interface)
 
-# main panel
-content_frame = ttk.Frame(root, padding=10)
-content_frame.grid(row=2, column=0, columnspan=3)
+# content frame grid layout
+content_frame = ttk.Frame(root, padding=overall_padding)
+content_frame.grid(row=3, column=0, columnspan=3, rowspan=3)
 
 # panel cols
 content_frame.columnconfigure(0, weight=1)
