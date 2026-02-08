@@ -5,21 +5,29 @@ import nmap
 import psutil
 import ipaddress
 
-def network_scan(network_ip, netmask='24', timeout=1, iface='eth0', verbose=False, output=False):
+def network_scan(network_ip, netmask='24', timeout=1, iface='eth0', verbose=False, output=False, parsed_return=False):
+    """
+        parsed_return (ip, mac): returns a list of tuples for each ip and its MAC
+    """
+
     print(f"Scanning network on {iface}...")
     ether_header = Ether(dst="ff:ff:ff:ff:ff:ff")    
     arp_header = ARP(pdst=f"{network_ip}/{netmask}")
     frame = ether_header / arp_header
     ans, unans = srp(frame, timeout=timeout, verbose=False, iface=iface)
+    
+    parsed_pkts = []
+    for send, received in ans:
+            parsed_pkts.append((received[ARP].psrc, received[Ether].src, '443,80'))
 
     if not verbose:
-        for send, received in ans:
-            print(f"=> {received[ARP].psrc} is at {received[Ether].src}")
-
+        for pkt in parsed_pkts:
+            print(f"=> {pkt[0]} is at {pkt[1]}")
+            
         print(f"Summary: answered {len(ans)}, unanswered {len(unans)}")
 
     if output: 
-        return ans
+        return parsed_pkts if parsed_return else ans
 
 def port_scanner(target_ip, port_range='22-443'):
     print("Starting scanning ports...")

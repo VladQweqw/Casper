@@ -1,8 +1,9 @@
 import core.utils.attacks as attacks
 import core.utils.tools as tools
 
-from core.utils.helpers import menu_options, overall_padding
+from core.utils.helpers import menu_options, overall_padding, APP_WIDTH, APP_HEIGHT
 import core.utils.panels as panels
+import core.utils.state
 
 import psutil
 import ipaddress
@@ -13,16 +14,11 @@ from tkinter import ttk
 from tkinter import font
 import sv_ttk
 
-# variables
-current_attack_option = ''
-current_interface_option = ''
-current_interface_object = {}
-
 root = tk.Tk()
 sv_ttk.set_theme('dark')
-root.geometry('600x700')
-root.minsize(600, 700)
-root.maxsize(600, 700)
+root.geometry(f"{APP_WIDTH}x{APP_HEIGHT}")
+root.minsize(APP_WIDTH, APP_HEIGHT)
+root.maxsize(APP_WIDTH, APP_HEIGHT)
 
 # App title / icon
 root.title("Casper - Peneration testing tool")
@@ -70,7 +66,7 @@ attackCombo = ttk.Combobox(
     width=30
 )
 attackCombo.grid(row=1, column=0, sticky='ew')
-current_attack_option = menu_options[0]
+core.utils.state.current_attack_option = menu_options[0]
 
 # Interface dropdown
 interfacesLabel = tk.Label(
@@ -89,20 +85,19 @@ interfacesCombo = ttk.Combobox(
     width=30
 )
 interfacesCombo.grid(row=1, column=0, sticky='we')
-current_interface_option = brief_interfaces[0]
-current_interface_object = next((item for item in interfaces if item['interface'] == current_interface_option), None)
+core.utils.state.current_interface_option = brief_interfaces[0]
+core.utils.state.current_interface_object = next((item for item in interfaces if item['interface'] == core.utils.state.current_attack_option), None)
 
 # get combobox state
 def get_current_interface(event):
-    global current_attack_option, current_interface_object
-    current_interface_option = interfacesCombo.get()
-    current_interface_object = next((item for item in interfaces if item['interface'] == current_interface_option), None)
+    core.utils.state.current_interface_option = interfacesCombo.get()
+    core.utils.state.current_interface_object = next((item for item in interfaces if item['interface'] == core.utils.state.current_interface_option), None)
 
 interfacesCombo.bind("<<ComboboxSelected>>", get_current_interface)
 
 # content frame grid layout
 content_frame = ttk.Frame(root, padding=overall_padding)
-content_frame.grid(row=3, column=0, columnspan=3, rowspan=3)
+content_frame.grid(row=2, column=0, columnspan=3, rowspan=3)
 
 # panel cols
 content_frame.columnconfigure(0, weight=1)
@@ -119,27 +114,25 @@ panels.clear_frame(content_frame)
 
 # add attack combobox listener
 def get_current_attack(event):
-    current_attack_option = attackCombo.get()
-    change_panel(current_attack_option)
+    core.utils.state.current_attack_option = attackCombo.get()
+    change_panel(core.utils.state.current_attack_option)
 
 attackCombo.bind("<<ComboboxSelected>>", get_current_attack)
 
 def change_panel(option):
-    if option == "Network Scan":  
+    if option == "Network Scan":
         panels.network_scan(content_frame, ttk)
-    elif option == "Port Scanner": 
+    elif option == "Port Scanner":
         panels.port_scan(content_frame, ttk)
     elif option == "ARP Spoofing":
         panels.arp_spoofing(content_frame, ttk)
     elif option == "ARP Spoofing (MITM)":
         panels.dns_poison(content_frame, ttk)
     else:
-        print('mere defaulet')
         panels.default(content_frame, ttk)
 
-
 # display the default page initial
-change_panel('none')
+change_panel('default')
 
 # last line
 root.mainloop()

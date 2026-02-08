@@ -1,4 +1,6 @@
 import core.utils.helpers as helpers
+import core.utils.tools as tools
+import core.utils.state
 
 import tkinter as tk
 from tkinter import ttk, Scrollbar
@@ -46,10 +48,30 @@ def default(content_frame, ttk):
     textbox.config(state='disabled')
 
 def network_scan(content_frame, ttk):
-    # res = tools.network_scan(network_ip=current_interface_object['network_ip'], iface=current_interface_object['windows_interface'], output=True, verbose=True)
     clear_frame(content_frame)
+    ans = None
 
-    ttk.Label(content_frame, text="network scan").grid(row=3, column=1, sticky='w')
+    def scan_handler():
+        ans = tools.network_scan(
+        network_ip=core.utils.state.current_interface_object['network_ip'],     
+        iface=core.utils.state.current_interface_object['windows_interface'], 
+        output=True, verbose=False, parsed_return=True)
+
+        tree.delete(*tree.get_children())
+        for host_tuple in ans:
+            tree.insert("", "end", values=host_tuple)
+
+    scan_btn = tk.Button(content_frame, text="Scan", command=scan_handler)
+    scan_btn.grid(row=0, column=0, sticky="n")
+
+    columns = ('IPv4 Address', "MAC address", "Open ports")
+    tree = ttk.Treeview(content_frame, columns=columns, show='headings')
+    
+    for col in columns:
+        tree.heading(col, text=col)
+        tree.column(col, width=int(helpers.APP_WIDTH/2), anchor='center')
+
+    tree.grid(row=1, column=0, sticky='nswe')
 
 def port_scan(content_frame, ttk):
     clear_frame(content_frame)
