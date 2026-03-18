@@ -6,6 +6,11 @@ menu_options = [
     'ARP Spoofing (MITM)',
 ]
 
+scan_types = {
+    'Quick Scan': 'quick_scan',
+    'Long Scan (Ports & OS)': 'long_scan'
+}
+
 # layout
 overall_padding = 10
 APP_WIDTH = 600

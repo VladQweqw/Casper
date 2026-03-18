@@ -3,8 +3,9 @@ import core.utils.tools as tools
 
 from core.utils.helpers import menu_options, overall_padding, APP_WIDTH, APP_HEIGHT
 import core.utils.panels as panels
-import core.utils.state
+import core.utils.state as state
 
+import platform
 import psutil
 import ipaddress
 import ctypes
@@ -12,21 +13,31 @@ import ctypes
 import tkinter as tk
 from tkinter import ttk
 from tkinter import font
+
 import sv_ttk
 
 root = tk.Tk()
 sv_ttk.set_theme('dark')
+
 root.geometry(f"{APP_WIDTH}x{APP_HEIGHT}")
 root.minsize(APP_WIDTH, APP_HEIGHT)
 root.maxsize(APP_WIDTH, APP_HEIGHT)
 
 # App title / icon
-root.title("Casper - Peneration testing tool")
-root.iconbitmap("public/images/logo.ico")
+root.title("Casper - Pentesting tool")
+# root.iconbitmap("public/images/logo.ico")s
 
 # font
 default_font = font.nametofont("TkDefaultFont")
 default_font.config(family='Segoe UI', size=12)
+
+# get client OS
+state.client_details['os'] = platform.uname()[0]
+state.client_details['system_name'] = platform.uname()[1]
+state.client_details['release'] = platform.uname()[2]
+state.client_details['release'] = platform.uname()[4]
+
+print(state.client_details)
 
 # grid layout
 # 2 columns, 1fr 1fr
@@ -66,7 +77,7 @@ attackCombo = ttk.Combobox(
     width=30
 )
 attackCombo.grid(row=1, column=0, sticky='ew')
-core.utils.state.current_attack_option = menu_options[0]
+state.current_attack_option = menu_options[0]
 
 # Interface dropdown
 interfacesLabel = tk.Label(
@@ -85,13 +96,13 @@ interfacesCombo = ttk.Combobox(
     width=30
 )
 interfacesCombo.grid(row=1, column=0, sticky='we')
-core.utils.state.current_interface_option = brief_interfaces[0]
-core.utils.state.current_interface_object = next((item for item in interfaces if item['interface'] == core.utils.state.current_attack_option), None)
+state.current_interface_option = brief_interfaces[0]
+state.current_interface_object = next((item for item in interfaces if item['interface_with_ip'] == state.current_attack_option), None)
 
 # get combobox state
 def get_current_interface(event):
-    core.utils.state.current_interface_option = interfacesCombo.get()
-    core.utils.state.current_interface_object = next((item for item in interfaces if item['interface'] == core.utils.state.current_interface_option), None)
+    state.current_interface_option = interfacesCombo.get()
+    state.current_interface_object = next((item for item in interfaces if item['interface_with_ip'] == state.current_interface_option), None)
 
 interfacesCombo.bind("<<ComboboxSelected>>", get_current_interface)
 
@@ -114,8 +125,8 @@ panels.clear_frame(content_frame)
 
 # add attack combobox listener
 def get_current_attack(event):
-    core.utils.state.current_attack_option = attackCombo.get()
-    change_panel(core.utils.state.current_attack_option)
+    state.current_attack_option = attackCombo.get()
+    change_panel(state.current_attack_option)
 
 attackCombo.bind("<<ComboboxSelected>>", get_current_attack)
 

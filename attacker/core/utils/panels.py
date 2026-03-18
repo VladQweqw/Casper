@@ -1,11 +1,13 @@
 import core.utils.helpers as helpers
 import core.utils.tools as tools
-import core.utils.state
+import core.utils.state as state
+from core.utils.logger import log
 
 import tkinter as tk
 from tkinter import ttk, Scrollbar
 from tkinter.scrolledtext import ScrolledText
 
+import threading
 import webbrowser
 
 def clear_frame(content_frame):
@@ -48,36 +50,138 @@ def default(content_frame, ttk):
     textbox.config(state='disabled')
 
 def network_scan(content_frame, ttk):
+    # initially clear the frame
     clear_frame(content_frame)
 
-    def scan_handler():
-        rc, val = tools.network_scan(
-            network_ip=core.utils.state.current_interface_object['network_ip'],     
-            iface=core.utils.state.current_interface_object['windows_interface'],
-            table_shown=True
-        )
+    # define layout
+    content_frame.columnconfigure(2, weight=1)
 
-        print(rc, val)
+    # variables
+    isScanLoading = {"value": False}
+    optionsBox = None
+    scanned_hosts = state.scanned_targets or {}
+    targetComboHosts = []
+    selected_target = state.selected_target or {}
+    selected_target_index = state.selected_target_index or 0
 
-        if not rc:
-            print(f"Error: {val}")
-            return
+    def get_current_target(event):
+        global selected_target, scanned_hosts
 
+        # get the value from scanned_host using selected index
+        selected_target_index = targetBox.current()
+        selected_target = scanned_hosts[selected_target_index]
+
+        # set the value as a global variable
+        state.selected_target_index = selected_target_index
+        state.selected_target = selected_target
+
+    targetBox = ttk.Combobox(
+        content_frame, 
+        values=tuple(targetComboHosts),
+        state='readonly',
+    )
+    targetBox.bind("<<ComboboxSelected>>", get_current_target)
+
+    optionsBox = ttk.Combobox(
+        content_frame, 
+        values=tuple(helpers.scan_types.keys()),
+        state='readonly',
+        width=int(helpers.APP_WIDTH/2) - helpers.overall_padding
+    )
+    optionsBox.current(0)
+
+    scan_btn = ttk.Button(
+        content_frame,
+        text="Scan",
+        command=lambda: threading.Thread(target=scan_handler).start(),
+        width=int(helpers.APP_WIDTH/2) - helpers.overall_padding
+    )
+    
+    loading_label = ttk.Label(content_frame, text="")
+
+    # upate table with new rows
+    def update_table(rows):
         tree.delete(*tree.get_children())
-        for host_tuple in val:
-            tree.insert("", "end", values=host_tuple)
+        for host_row in rows:
+            tree.insert("", "end", values=host_row)
 
-    scan_btn = tk.Button(content_frame, text="Scan", command=scan_handler)
-    scan_btn.grid(row=1, column=0, sticky="n", pady=helpers.overall_padding)
+    def update_target_combo(rows):
 
+        # format display string for combo box
+        for host in rows:
+            formatted_str = f"{host[0]} {host[1]}" if helpers.scan_types[optionsBox.get()] == 'quick_scan' else f"{host[0]} {host[1]} {host[3]}"
+            targetComboHosts.append(formatted_str)
+        
+        # add targets to the targets combo box
+        targetBox['values'] = targetComboHosts
+        # use the cached index or 0
+        targetBox.current(state.selected_target_index)
+
+    def scan_handler():
+        global scanned_hosts
+
+        try:
+            content_frame.after(0, start_loading)
+            rc, scanned_hosts = tools.network_scan(
+                network_ip=state.current_interface_object['network_ip'],
+                iface=state.current_interface_object['interface'],
+                scan_type=helpers.scan_types[optionsBox.get()],
+                table_shown=True
+            )
+        except:
+            # In case of error, we want to stop the loading state
+            content_frame.after(0, lambda: log(message=scanned_hosts, severity="ERROR"))
+            content_frame.after(0, stop_loading)
+
+            scan_btn.config(text="Error", state="enabled")
+
+        # if the response if false
+        if not rc:
+            content_frame.after(0, lambda: log(message=scanned_hosts, severity="ERROR"))
+            content_frame.after(0, stop_loading)
+            return
+        
+        # cache scanned hosts value
+        state.scanned_targets = scanned_hosts
+
+        # add values to combobox
+        update_target_combo(scanned_hosts)
+
+        # update the table
+        content_frame.after(0, lambda: update_table(scanned_hosts))
+        content_frame.after(0, stop_loading)
+
+    def start_loading():
+        isScanLoading["value"] = True
+        scan_btn.config(text="Scanning...", state="disabled")
+
+    def stop_loading():
+        isScanLoading["value"] = False
+        scan_btn.config(text="Scan", state="normal")
+
+    # define table header
     columns = ('IPv4 Address', "MAC address", "Open ports", "OS")
+    columns_widths = (110, 130, 170, 170)
+
+    # dynamically add table content
     tree = ttk.Treeview(content_frame, columns=columns, show='headings')
+    for idx in range(len(columns)):
+        tree.heading(columns[idx], text=columns[idx])
+        tree.column(columns[idx], width=columns_widths[idx], anchor='w')
+    
+    # grid layout
+    scan_btn.grid(row=1, column=1, sticky="we", pady=helpers.overall_padding, padx=helpers.overall_padding / 2)
+    targetBox.grid(row=2, column=0, columnspan=2, sticky='we', pady=helpers.overall_padding)
+    tree.grid(row=4, column=0, columnspan=2, sticky='nswe')
+    loading_label.grid(row=3, column=1, sticky='n')
+    optionsBox.grid(row=1, column=0, sticky='we', pady=helpers.overall_padding, padx=helpers.overall_padding / 2)
 
-    for col in columns:
-        tree.heading(col, text=col)
-        tree.column(col, width=int((helpers.APP_WIDTH - helpers.overall_padding * 2)/(len(columns))), anchor='center')
+    # if the values are cached, use them
+    if state.scanned_targets:
+        update_table(state.scanned_targets)
 
-    tree.grid(row=2, column=0, sticky='nswe')
+    if state.selected_target:
+        update_target_combo(state.scanned_targets)
 
 def port_scan(content_frame, ttk):
     clear_frame(content_frame)

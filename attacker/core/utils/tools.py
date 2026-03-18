@@ -1,64 +1,96 @@
+import core.utils.state as state
+from core.utils.logger import log
+from core.utils.helpers import scan_types
+
 from scapy.all import *
-from scapy.arch.windows import get_windows_if_list
+
+if state.client_details['os'] == 'Windows':
+    from scapy.arch.windows import get_windows_if_list
 
 import nmap
 import psutil
 import ipaddress
 
-def network_scan(network_ip, netmask='24', iface=None, table_shown=False):
+def network_scan(network_ip, netmask='24', iface=None, scan_type='quick_scan', table_shown=False):
     """
+        network_ip: x.x.x.x, is the network ip on the target iface
+        netmask: /24, default, works together with network_ip
         iface: None/interface: the interface on which to make the scans
-        parsed_return (ip, mac): returns a list of tuples for each ip and its MAC
-        table_shown: Boolean - Returns a tuple that can be shown in a table
+        scan_type: Scan type, scan type to operate
+        table_shown: Boolean - Returns a tuple (ip, mac, ports, os) that can be shown in a table
     """
 
-    arguments = "-sS -v -O"
+    arguments = "-sn"
+    if scan_type not in scan_types.values():
+        return False, f"Invalid scan type: {scan_type}"
+    
+    if scan_type == 'long_scan':
+        arguments = "-sS -v -O"
 
     if iface is not None:
         arguments += " " + iface
 
     if network_ip is None or netmask is None:
+        log(message=f"Invalid network IP or netmask: {network_ip}/{netmask}", severity='ERROR')
         return False, "Invalid Network IP or Netmask"
 
-    resp = []
-    print(f"{network_ip}/{netmask}", arguments)
-    
+    complete_resp = []
+    tuple_resp = []    
     nm = nmap.PortScanner()
 
     try:
-        nm.scan(hosts=f"{network_ip}/{netmask}", arguments=arguments)
+        log(message=f"Network ({scan_type}) scan started on {network_ip}/{netmask}")
+
+        nm.scan(hosts=f"{network_ip}/{netmask}", arguments=arguments, sudo=state.client_details['os'] == 'Linux')
         for host in nm.all_hosts():
             if nm[host]['status']['state'] == 'up':
                 ports = {}
-                for open_port, type_of_port in nm[host]['tcp'].items():
-                    ports[str(open_port)] = type_of_port['name']
+                mac = 'None'
+                os = 'None'
+                ipv4 ="None"
+                print(nm[host])
+
+                if 'tcp' in nm[host]:
+                    for open_port, type_of_port in nm[host]['tcp'].items():
+                        ports[str(open_port)] = type_of_port['name']
+                
+                if 'mac' in nm[host]['addresses']:
+                    mac = nm[host]['addresses']['mac']
+
+                if 'osmatch' in nm[host]:
+                    os = nm[host]['osmatch'][0]['name']
+
+                if 'ipv4' in nm[host]['addresses']:
+                    ipv4 = nm[host]['addresses']['ipv4']
 
                 if table_shown:
-                    
-                    mac = 'None'
-                    if 'mac' in nm[host]['addresses']:
-                        mac = nm[host]['addresses']['mac']
-
-                    resp.append(
-                        (nm[host]['addresses']['ipv4'], mac, ",".join(ports), nm[host]['osmatch'][0]['name']),
+                    tuple_resp.append(
+                        (ipv4, mac, ",".join(ports), os),
                     )
                 else:
-                    resp.append(
-                    {
-                        'addresses': nm[host]['addresses'],
-                        'ports': ports,
-                        'os': nm[host]['osmatch'][0]['name']
-                    }
-                )
-    
+                    complete_resp.append(
+                        {
+                            'ipv4': ipv4,
+                            'mac': mac,
+                            'ports': ports,
+                            'os':os
+                        }
+                    )
+
+        log(message=f"Network scan ({scan_type}) completed on {network_ip}/{netmask}, {len(nm.all_hosts())} targets found")
+
+        if table_shown:
+            state.scanned_targets_tuple = tuple_resp
+            return True, tuple_resp
+        
+        state.scanned_targets = complete_resp
+        return True, complete_resp
+
     except nmap.PortScannerError as e:
         print(f"Nmap error: {e}")
         return False, e
     except Exception as e:
         return False, e
-
-    return True, resp
-
 
 def port_scanner(target_ip, port_range='22-443'):
     print("Starting scanning ports...")
@@ -85,26 +117,30 @@ def port_scanner(target_ip, port_range='22-443'):
 def get_interfaces():
     interfaces = []
     brief_interfaces = []
-    
-    windows_ifaces = get_windows_if_list()
 
     for iface, addrs in psutil.net_if_addrs().items():
             for addr in addrs:
                 if addr.family.name == 'AF_INET':
                     network = ipaddress.IPv4Network(f"{addr.address}/{addr.netmask}", strict=False)
-                    windows_iface_object = next((item for item in windows_ifaces if item['name'] == iface), '') 
 
-                    # create a list of interfaces
-                    interfaces.append({
+                    interface_parsed_obj = {
                         "interface": iface,
+                        'interface_with_ip': f"{iface} ({addr.address})",
                         'network_ip': network.network_address,
                         'host_ip': addr.address,
                         'netmask': network.netmask,
                         'netprefix': network.prefixlen,
                         'formatted': network,
-                        'windows_interface': fr"\\Device\\NPF_{windows_iface_object['guid']}"
-                    })
+                    }
+                    
+                    if state.client_details['os'] == "Windows":
+                        windows_iface_object = next((item for item in get_windows_if_list() if item['name'] == iface), '') 
+                        interface_parsed_obj['interface'] = fr"\\Device\\NPF_{windows_iface_object['guid']}"
+                    
+                    print(interface_parsed_obj)
 
-                    brief_interfaces.append(iface)
+                    # create a list of interfaces
+                    interfaces.append(interface_parsed_obj)
+                    brief_interfaces.append(f"{iface} ({addr.address})")
 
     return interfaces, brief_interfaces
