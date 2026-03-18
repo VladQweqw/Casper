@@ -1,4 +1,6 @@
 # ARP Spoofing
+def arp_spoofing():
+    pass
 
 # DHCP starvation
 
