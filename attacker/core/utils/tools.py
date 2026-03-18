@@ -5,29 +5,60 @@ import nmap
 import psutil
 import ipaddress
 
-def network_scan(network_ip, netmask='24', timeout=1, iface='eth0', verbose=False, output=False, parsed_return=False):
+def network_scan(network_ip, netmask='24', iface=None, table_shown=False):
     """
+        iface: None/interface: the interface on which to make the scans
         parsed_return (ip, mac): returns a list of tuples for each ip and its MAC
+        table_shown: Boolean - Returns a tuple that can be shown in a table
     """
 
-    print(f"Scanning network on {iface}...")
-    ether_header = Ether(dst="ff:ff:ff:ff:ff:ff")    
-    arp_header = ARP(pdst=f"{network_ip}/{netmask}")
-    frame = ether_header / arp_header
-    ans, unans = srp(frame, timeout=timeout, verbose=False, iface=iface)
+    arguments = "-sS -v -O"
+
+    if iface is not None:
+        arguments += " " + iface
+
+    if network_ip is None or netmask is None:
+        return False, "Invalid Network IP or Netmask"
+
+    resp = []
+    print(f"{network_ip}/{netmask}", arguments)
     
-    parsed_pkts = []
-    for send, received in ans:
-            parsed_pkts.append((received[ARP].psrc, received[Ether].src, '443,80'))
+    nm = nmap.PortScanner()
 
-    if not verbose:
-        for pkt in parsed_pkts:
-            print(f"=> {pkt[0]} is at {pkt[1]}")
-            
-        print(f"Summary: answered {len(ans)}, unanswered {len(unans)}")
+    try:
+        nm.scan(hosts=f"{network_ip}/{netmask}", arguments=arguments)
+        for host in nm.all_hosts():
+            if nm[host]['status']['state'] == 'up':
+                ports = {}
+                for open_port, type_of_port in nm[host]['tcp'].items():
+                    ports[str(open_port)] = type_of_port['name']
 
-    if output: 
-        return parsed_pkts if parsed_return else ans
+                if table_shown:
+                    
+                    mac = 'None'
+                    if 'mac' in nm[host]['addresses']:
+                        mac = nm[host]['addresses']['mac']
+
+                    resp.append(
+                        (nm[host]['addresses']['ipv4'], mac, ",".join(ports), nm[host]['osmatch'][0]['name']),
+                    )
+                else:
+                    resp.append(
+                    {
+                        'addresses': nm[host]['addresses'],
+                        'ports': ports,
+                        'os': nm[host]['osmatch'][0]['name']
+                    }
+                )
+    
+    except nmap.PortScannerError as e:
+        print(f"Nmap error: {e}")
+        return False, e
+    except Exception as e:
+        return False, e
+
+    return True, resp
+
 
 def port_scanner(target_ip, port_range='22-443'):
     print("Starting scanning ports...")
@@ -71,7 +102,7 @@ def get_interfaces():
                         'netmask': network.netmask,
                         'netprefix': network.prefixlen,
                         'formatted': network,
-                        'windows_interface': fr"\Device\NPF_{windows_iface_object['guid']}"
+                        'windows_interface': fr"\\Device\\NPF_{windows_iface_object['guid']}"
                     })
 
                     brief_interfaces.append(iface)

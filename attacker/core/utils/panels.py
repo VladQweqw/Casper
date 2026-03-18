@@ -49,29 +49,35 @@ def default(content_frame, ttk):
 
 def network_scan(content_frame, ttk):
     clear_frame(content_frame)
-    ans = None
 
     def scan_handler():
-        ans = tools.network_scan(
-        network_ip=core.utils.state.current_interface_object['network_ip'],     
-        iface=core.utils.state.current_interface_object['windows_interface'], 
-        output=True, verbose=False, parsed_return=True)
+        rc, val = tools.network_scan(
+            network_ip=core.utils.state.current_interface_object['network_ip'],     
+            iface=core.utils.state.current_interface_object['windows_interface'],
+            table_shown=True
+        )
+
+        print(rc, val)
+
+        if not rc:
+            print(f"Error: {val}")
+            return
 
         tree.delete(*tree.get_children())
-        for host_tuple in ans:
+        for host_tuple in val:
             tree.insert("", "end", values=host_tuple)
 
     scan_btn = tk.Button(content_frame, text="Scan", command=scan_handler)
-    scan_btn.grid(row=0, column=0, sticky="n")
+    scan_btn.grid(row=1, column=0, sticky="n", pady=helpers.overall_padding)
 
-    columns = ('IPv4 Address', "MAC address", "Open ports")
+    columns = ('IPv4 Address', "MAC address", "Open ports", "OS")
     tree = ttk.Treeview(content_frame, columns=columns, show='headings')
-    
+
     for col in columns:
         tree.heading(col, text=col)
-        tree.column(col, width=int(helpers.APP_WIDTH/2), anchor='center')
+        tree.column(col, width=int((helpers.APP_WIDTH - helpers.overall_padding * 2)/(len(columns))), anchor='center')
 
-    tree.grid(row=1, column=0, sticky='nswe')
+    tree.grid(row=2, column=0, sticky='nswe')
 
 def port_scan(content_frame, ttk):
     clear_frame(content_frame)
