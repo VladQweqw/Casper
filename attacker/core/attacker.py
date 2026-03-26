@@ -37,8 +37,6 @@ state.client_details['system_name'] = platform.uname()[1]
 state.client_details['release'] = platform.uname()[2]
 state.client_details['release'] = platform.uname()[4]
 
-print(state.client_details)
-
 # grid layout
 # 2 columns, 1fr 1fr
 root.columnconfigure(0, weight=1)
@@ -99,10 +97,16 @@ interfacesCombo.grid(row=1, column=0, sticky='we')
 state.current_interface_option = brief_interfaces[0]
 state.current_interface_object = next((item for item in interfaces if item['interface_with_ip'] == state.current_attack_option), None)
 
+print(interfaces)
+print(brief_interfaces)
+
 # get combobox state
 def get_current_interface(event):
     state.current_interface_option = interfacesCombo.get()
     state.current_interface_object = next((item for item in interfaces if item['interface_with_ip'] == state.current_interface_option), None)
+
+# initial to set default iface
+get_current_interface(None)
 
 interfacesCombo.bind("<<ComboboxSelected>>", get_current_interface)
 

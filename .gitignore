@@ -7,7 +7,7 @@
 attacker/logs
 attacker/logs/*
 */logs
-*/logs/*
+*/logs/*``
 
 ./attacker/logs
 attacker/logs/attacker.log

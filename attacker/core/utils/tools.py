@@ -39,16 +39,15 @@ def network_scan(network_ip, netmask='24', iface=None, scan_type='quick_scan', t
     nm = nmap.PortScanner()
 
     try:
-        log(message=f"Network ({scan_type}) scan started on {network_ip}/{netmask}")
+        log(message=f"Network ({scan_type}) scan started on {network_ip}/{netmask} using iface: {iface}")
 
         nm.scan(hosts=f"{network_ip}/{netmask}", arguments=arguments, sudo=state.client_details['os'] == 'Linux')
         for host in nm.all_hosts():
             if nm[host]['status']['state'] == 'up':
                 ports = {}
-                mac = 'None'
-                os = 'None'
-                ipv4 ="None"
-                print(nm[host])
+                mac = None
+                os = None
+                ipv4 =None
 
                 if 'tcp' in nm[host]:
                     for open_port, type_of_port in nm[host]['tcp'].items():
@@ -93,7 +92,6 @@ def network_scan(network_ip, netmask='24', iface=None, scan_type='quick_scan', t
         return False, e
 
 def port_scanner(target_ip, port_range='22-443'):
-    print("Starting scanning ports...")
     nm = nmap.PortScanner()
     nm.scan(target_ip, port_range)
 
@@ -106,13 +104,6 @@ def port_scanner(target_ip, port_range='22-443'):
     MAC_address = target['addresses']['mac'] or "No MAC"
     vendor = target['vendor'][MAC_address] or "No vendor"
     open_ports = target['tcp']
-
-    # print info
-    print(f"Hostname: {device_hostname}, {device_type}")
-    print(f"IPv4: {IPv4_address}, MAC: {MAC_address}")
-    print(f"Vendor: {vendor}")
-    for port, state in open_ports.items():
-        print(f"""Port: {port}, state: {state['state']}, name: {state['name']}, {state['product']}""")
 
 def get_interfaces():
     interfaces = []
@@ -137,8 +128,6 @@ def get_interfaces():
                         windows_iface_object = next((item for item in get_windows_if_list() if item['name'] == iface), '') 
                         interface_parsed_obj['interface'] = fr"\\Device\\NPF_{windows_iface_object['guid']}"
                     
-                    print(interface_parsed_obj)
-
                     # create a list of interfaces
                     interfaces.append(interface_parsed_obj)
                     brief_interfaces.append(f"{iface} ({addr.address})")

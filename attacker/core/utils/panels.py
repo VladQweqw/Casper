@@ -59,7 +59,7 @@ def network_scan(content_frame, ttk):
     # variables
     isScanLoading = {"value": False}
     optionsBox = None
-    scanned_hosts = state.scanned_targets or {}
+    scanned_hosts = state.scanned_targets or []
     targetComboHosts = []
     selected_target = state.selected_target or {}
     selected_target_index = state.selected_target_index or 0
@@ -74,6 +74,9 @@ def network_scan(content_frame, ttk):
         # set the value as a global variable
         state.selected_target_index = selected_target_index
         state.selected_target = selected_target
+
+        log(message=f"State changed: selected_target_index is now {selected_target_index}", severity="INFO")
+        log(message=f"State changed: selected_target is now {selected_target}", severity="INFO")
 
     targetBox = ttk.Combobox(
         content_frame, 
@@ -101,15 +104,27 @@ def network_scan(content_frame, ttk):
 
     # upate table with new rows
     def update_table(rows):
+        log(message=f"Netowork scan table is being updated with {rows}", severity="INFO")
+
         tree.delete(*tree.get_children())
         for host_row in rows:
             tree.insert("", "end", values=host_row)
 
     def update_target_combo(rows):
+        log(message=f"Netowork scan target dropdown is being updated with {rows}", severity="INFO")
+
+        # clear the box
+        targetComboHosts.clear()
+        targetBox['values'] = ()
+        targetBox.set("")
 
         # format display string for combo box
         for host in rows:
-            formatted_str = f"{host[0]} {host[1]}" if helpers.scan_types[optionsBox.get()] == 'quick_scan' else f"{host[0]} {host[1]} {host[3]}"
+            ip = host[0] if host[0] is not None else ""
+            mac = host[1] if host[1] is not None else ""
+            os = host[2] if host[2] is not None else ""
+
+            formatted_str = f"{ip} {mac}" if helpers.scan_types[optionsBox.get()] == 'quick_scan' else f"{ip} {mac} {os}"
             targetComboHosts.append(formatted_str)
         
         # add targets to the targets combo box
@@ -122,24 +137,20 @@ def network_scan(content_frame, ttk):
 
         try:
             content_frame.after(0, start_loading)
+
             rc, scanned_hosts = tools.network_scan(
                 network_ip=state.current_interface_object['network_ip'],
                 iface=state.current_interface_object['interface'],
                 scan_type=helpers.scan_types[optionsBox.get()],
                 table_shown=True
             )
-        except:
+
+        except Exception as e:
             # In case of error, we want to stop the loading state
-            content_frame.after(0, lambda: log(message=scanned_hosts, severity="ERROR"))
+            content_frame.after(0, lambda: log(message=f"Network scan failed ({helpers.scan_types[optionsBox.get()]}), iface: {state.current_interface_option}\nError: {e}", severity="ERROR"))
             content_frame.after(0, stop_loading)
 
             scan_btn.config(text="Error", state="enabled")
-
-        # if the response if false
-        if not rc:
-            content_frame.after(0, lambda: log(message=scanned_hosts, severity="ERROR"))
-            content_frame.after(0, stop_loading)
-            return
         
         # cache scanned hosts value
         state.scanned_targets = scanned_hosts
@@ -179,9 +190,13 @@ def network_scan(content_frame, ttk):
     # if the values are cached, use them
     if state.scanned_targets:
         update_table(state.scanned_targets)
+        log(message=f"Loaded from cache, scanned_targets: {state.scanned_targets}", severity="INFO")
+
 
     if state.selected_target:
         update_target_combo(state.scanned_targets)
+        log(message=f"Loaded from cache, selected_target: {state.selected_target}", severity="INFO")
+
 
 def port_scan(content_frame, ttk):
     clear_frame(content_frame)
