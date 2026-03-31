@@ -97,9 +97,6 @@ interfacesCombo.grid(row=1, column=0, sticky='we')
 state.current_interface_option = brief_interfaces[0]
 state.current_interface_object = next((item for item in interfaces if item['interface_with_ip'] == state.current_attack_option), None)
 
-print(interfaces)
-print(brief_interfaces)
-
 # get combobox state
 def get_current_interface(event):
     state.current_interface_option = interfacesCombo.get()

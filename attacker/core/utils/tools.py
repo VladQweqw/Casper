@@ -4,9 +4,6 @@ from core.utils.helpers import scan_types
 
 from scapy.all import *
 
-if state.client_details['os'] == 'Windows':
-    from scapy.arch.windows import get_windows_if_list
-
 import nmap
 import psutil
 import ipaddress
@@ -123,8 +120,10 @@ def get_interfaces():
                         'netprefix': network.prefixlen,
                         'formatted': network,
                     }
-                    
                     if state.client_details['os'] == "Windows":
+                        # import library for windows
+                        from scapy.arch.windows import get_windows_if_list
+
                         windows_iface_object = next((item for item in get_windows_if_list() if item['name'] == iface), '') 
                         interface_parsed_obj['interface'] = fr"\\Device\\NPF_{windows_iface_object['guid']}"
                     

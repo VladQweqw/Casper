@@ -89,7 +89,7 @@ def network_scan(content_frame, ttk):
         content_frame, 
         values=tuple(helpers.scan_types.keys()),
         state='readonly',
-        width=int(helpers.APP_WIDTH/2) - helpers.overall_padding
+        width=100
     )
     optionsBox.current(0)
 
@@ -97,7 +97,7 @@ def network_scan(content_frame, ttk):
         content_frame,
         text="Scan",
         command=lambda: threading.Thread(target=scan_handler).start(),
-        width=int(helpers.APP_WIDTH/2) - helpers.overall_padding
+        width=100
     )
     
     loading_label = ttk.Label(content_frame, text="")
@@ -181,11 +181,11 @@ def network_scan(content_frame, ttk):
         tree.column(columns[idx], width=columns_widths[idx], anchor='w')
     
     # grid layout
-    scan_btn.grid(row=1, column=1, sticky="we", pady=helpers.overall_padding, padx=helpers.overall_padding / 2)
+    optionsBox.grid(row=1, column=0, sticky='n', pady=helpers.overall_padding, padx=helpers.overall_padding / 2)
+    scan_btn.grid(row=1, column=1, sticky="n", pady=helpers.overall_padding, padx=helpers.overall_padding / 2)
     targetBox.grid(row=2, column=0, columnspan=2, sticky='we', pady=helpers.overall_padding)
-    tree.grid(row=4, column=0, columnspan=2, sticky='nswe')
+    tree.grid(row=3, column=0, columnspan=2, sticky='nswe')
     loading_label.grid(row=3, column=1, sticky='n')
-    optionsBox.grid(row=1, column=0, sticky='we', pady=helpers.overall_padding, padx=helpers.overall_padding / 2)
 
     # if the values are cached, use them
     if state.scanned_targets:
@@ -197,14 +197,97 @@ def network_scan(content_frame, ttk):
         update_target_combo(state.scanned_targets)
         log(message=f"Loaded from cache, selected_target: {state.selected_target}", severity="INFO")
 
-
-def port_scan(content_frame, ttk):
-    clear_frame(content_frame)
-    ttk.Label(content_frame, text="port_scan").grid(row=1, column=1, sticky='w')
-
 def arp_spoofing(content_frame, ttk):
+    # initially clear the frame
     clear_frame(content_frame)
-    ttk.Label(content_frame, text="arp spoofing").grid(row=1, column=1, sticky='w')
+
+    # define layout
+    content_frame.columnconfigure(2, weight=1)
+
+    # variables
+    sourcesBox = None
+    scanned_hosts = state.scanned_targets or []
+    selected_target = state.selected_target or {}
+    selected_target_index = state.selected_target_index or 0
+
+    def get_current_target(event):
+        global selected_target, scanned_hosts
+
+        # get the value from scanned_host using selected index
+        selected_target_index = targetBox.current()
+
+        # set the value as a global variable
+        state.selected_target_index = selected_target_index
+        state.selected_target = selected_target
+
+        log(message=f"State changed: selected_target_index is now {selected_target_index}", severity="INFO")
+        log(message=f"State changed: selected_target is now {selected_target}", severity="INFO")
+
+    targetBox = ttk.Combobox(
+        content_frame, 
+        values=tuple(scanned_hosts),
+        state='readonly',
+    )
+    targetBox.bind("<<ComboboxSelected>>", get_current_target)
+
+    sourcesBox = ttk.Combobox(
+        content_frame, 
+        values=tuple(scanned_hosts),
+        state='readonly',
+        width=int(helpers.APP_WIDTH/2) - helpers.overall_padding
+    )
+    # sourcesBox.current(selected_target_index)
+
+    scan_btn = ttk.Button(
+        content_frame,
+        text="Spoof",
+        command=lambda: threading.Thread(target=scan_handler).start(),
+        width=int(helpers.APP_WIDTH/2) - helpers.overall_padding
+    )
+    
+    # upate table with new rows
+    def update_table(rows):
+        log(message=f"Netowork scan table is being updated with {rows}", severity="INFO")
+
+        tree.delete(*tree.get_children())
+        for host_row in rows:
+            tree.insert("", "end", values=host_row)
+
+    def update_target_combo(rows):
+        log(message=f"Netowork scan target dropdown is being updated with {rows}", severity="INFO")
+
+        # clear the box
+        targetComboHosts.clear()
+        targetBox['values'] = ()
+        targetBox.set("")
+
+        # format display string for combo box
+        for host in rows:
+            ip = host[0] if host[0] is not None else ""
+            mac = host[1] if host[1] is not None else ""
+            os = host[2] if host[2] is not None else ""
+
+            formatted_str = f"{ip} {mac}" if helpers.scan_types[optionsBox.get()] == 'quick_scan' else f"{ip} {mac} {os}"
+            targetComboHosts.append(formatted_str)
+        
+        # add targets to the targets combo box
+        targetBox['values'] = targetComboHosts
+        # use the cached index or 0
+        targetBox.current(state.selected_target_index)
+
+    # grid layout
+    scan_btn.grid(row=3, column=1, columnspan=2, sticky="we", pady=helpers.overall_padding, padx=helpers.overall_padding / 2)
+    targetBox.grid(row=2, column=2, sticky='we', pady=helpers.overall_padding)
+    sourcesBox.grid(row=2, column=1, sticky='we', pady=helpers.overall_padding, padx=helpers.overall_padding / 2)
+
+    # if the values are cached, use them
+    if state.scanned_targets:
+        update_table(state.scanned_targets)
+        log(message=f"Loaded from cache, scanned_targets: {state.scanned_targets}", severity="INFO")
+
+    if state.selected_target:
+        update_target_combo(state.scanned_targets)
+        log(message=f"Loaded from cache, selected_target: {state.selected_target}", severity="INFO")
 
 def dns_poison(content_frame, ttk):
     clear_frame(content_frame)

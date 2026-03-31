@@ -11,3 +11,4 @@ attacker/logs/*
 
 ./attacker/logs
 attacker/logs/attacker.log
+/attacker/logs/attacker.log
