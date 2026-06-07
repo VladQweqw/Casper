@@ -233,18 +233,37 @@ def arp_spoofing(content_frame, ttk):
         log(message=f"State changed: selected_target_index is now {state.selected_target_index}", severity="INFO")
         log(message=f"State changed: selected_target is now {state.selected_target}", severity="INFO")
 
+    stop_event = threading.Event()
+    isSpoofing = False
+    thread = None
     def scan_handler():
-        
-        attacks.arp_spoofing_target(
-            host_tupl=state.selected_source, 
-            target_tupl=state.selected_target, 
-            randomise_mac=var.get())
+        nonlocal isSpoofing, stop_event, thread
 
+        def start():
+            textVar.set("Stop spoofing")
+            while not stop_event.is_set():
+                attacks.arp_spoofing_target(
+                    host_tupl=state.selected_source, 
+                    target_tupl=state.selected_target, 
+                    randomise_mac=var.get(),
+                    delay=0.2
+                )
+
+        def stop():
+            stop_event.set()
+            textVar.set("Start spoofing")
+        
+        if isSpoofing:
+            stop()
+        else:
+            stop_event.clear()
+            thread = threading.Thread(target=start, daemon=True)
+            thread.start()
+        
+        isSpoofing = not isSpoofing
         return True
 
     def set_current_source(event):
-        print(sourcesBox)
-
         source_index = sourcesBox.current()
         source_tupl = source_hosts[source_index]
 
@@ -275,11 +294,14 @@ def arp_spoofing(content_frame, ttk):
 
     var = tk.IntVar()
     checkbox = ttk.Checkbutton(content_frame, text='Randomise MAC', variable=var, onvalue=True, offvalue=False)
+    
+    textVar = tk.StringVar()
+    textVar.set("Start spoofing")
 
     scan_btn = ttk.Button(
         content_frame,
-        text="Spoof",
-        command=lambda: threading.Thread(target=scan_handler).start(),
+        textvariable=textVar,
+        command=scan_handler,
         width=helpers.APP_WIDTH
     )
     

@@ -455,3 +455,117 @@
 7/6/2026 15:5:29 [INFO] State changed: selected_target is now ('10.25.4.188', '98:E7:F4:03:63:2E', '', None)
 7/6/2026 15:5:30 [INFO] State changed: selected_source_index is now 2
 7/6/2026 15:5:30 [INFO] State changed: selected_source is now ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None)
+7/6/2026 15:27:54 [INFO] Network (quick_scan) scan started on 26.0.0.0/24 using iface: \\Device\\NPF_{C29B79E1-0199-4CEC-8567-3DF27D386EE7}
+7/6/2026 15:27:58 [INFO] Network scan (quick_scan) completed on 26.0.0.0/24, 1 targets found
+7/6/2026 15:27:58 [INFO] Netowork scan target dropdown is being updated with [('26.0.0.1', '02:00:00:00:51:00', '', None)]
+7/6/2026 15:27:58 [INFO] Netowork scan table is being updated with [('26.0.0.1', '02:00:00:00:51:00', '', None)]
+7/6/2026 15:28:3 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:28:6 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:28:6 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:28:6 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:28:9 [INFO] State changed: selected_target_index is now 3
+7/6/2026 15:28:9 [INFO] State changed: selected_target is now ('10.25.4.50', '44:A8:42:34:2D:09', '', None)
+7/6/2026 15:28:9 [INFO] State changed: selected_source_index is now 1
+7/6/2026 15:28:9 [INFO] State changed: selected_source is now ('10.25.4.1', 'BC:24:11:6C:79:9A', '', None)
+7/6/2026 15:32:34 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:32:37 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:32:37 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:32:37 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:32:40 [INFO] State changed: selected_target_index is now 2
+7/6/2026 15:32:40 [INFO] State changed: selected_target is now ('10.25.4.188', '98:E7:F4:03:63:2E', '', None)
+7/6/2026 15:32:44 [INFO] State changed: selected_source_index is now 2
+7/6/2026 15:32:44 [INFO] State changed: selected_source is now ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None)
+7/6/2026 15:44:20 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:44:24 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:44:24 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:44:24 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:44:28 [INFO] State changed: selected_target_index is now 2
+7/6/2026 15:44:28 [INFO] State changed: selected_target is now ('10.25.4.188', '98:E7:F4:03:63:2E', '', None)
+7/6/2026 15:44:30 [INFO] State changed: selected_source_index is now 1
+7/6/2026 15:44:30 [INFO] State changed: selected_source is now ('10.25.4.1', 'BC:24:11:6C:79:9A', '', None)
+7/6/2026 15:45:38 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:45:42 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:45:42 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:45:42 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:45:46 [INFO] State changed: selected_source_index is now 2
+7/6/2026 15:45:46 [INFO] State changed: selected_source is now ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None)
+7/6/2026 15:45:46 [INFO] State changed: selected_target_index is now 1
+7/6/2026 15:45:46 [INFO] State changed: selected_target is now ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None)
+7/6/2026 15:47:39 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:47:42 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:47:42 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:47:42 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:47:44 [INFO] State changed: selected_target_index is now 1
+7/6/2026 15:47:44 [INFO] State changed: selected_target is now ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None)
+7/6/2026 15:47:45 [INFO] State changed: selected_source_index is now 2
+7/6/2026 15:47:45 [INFO] State changed: selected_source is now ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None)
+7/6/2026 15:48:35 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:48:38 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:48:38 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:48:39 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:48:40 [INFO] State changed: selected_target_index is now 2
+7/6/2026 15:48:40 [INFO] State changed: selected_target is now ('10.25.4.188', '98:E7:F4:03:63:2E', '', None)
+7/6/2026 15:48:41 [INFO] State changed: selected_source_index is now 1
+7/6/2026 15:48:41 [INFO] State changed: selected_source is now ('10.25.4.1', 'BC:24:11:6C:79:9A', '', None)
+7/6/2026 15:48:48 [INFO] State changed: selected_source_index is now 4
+7/6/2026 15:48:48 [INFO] State changed: selected_source is now ('10.25.4.50', '44:A8:42:34:2D:09', '', None)
+7/6/2026 15:48:48 [INFO] State changed: selected_target_index is now 3
+7/6/2026 15:48:48 [INFO] State changed: selected_target is now ('10.25.4.50', '44:A8:42:34:2D:09', '', None)
+7/6/2026 15:49:16 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:49:19 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:49:19 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:49:19 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:49:23 [INFO] State changed: selected_source_index is now 3
+7/6/2026 15:49:23 [INFO] State changed: selected_source is now ('10.25.4.188', '98:E7:F4:03:63:2E', '', None)
+7/6/2026 15:49:24 [INFO] State changed: selected_target_index is now 2
+7/6/2026 15:49:24 [INFO] State changed: selected_target is now ('10.25.4.188', '98:E7:F4:03:63:2E', '', None)
+7/6/2026 15:49:27 [INFO] State changed: selected_source_index is now 1
+7/6/2026 15:49:27 [INFO] State changed: selected_source is now ('10.25.4.1', 'BC:24:11:6C:79:9A', '', None)
+7/6/2026 15:50:8 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:50:12 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:50:12 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:50:12 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:50:17 [INFO] State changed: selected_source_index is now 1
+7/6/2026 15:50:17 [INFO] State changed: selected_source is now ('10.25.4.1', 'BC:24:11:6C:79:9A', '', None)
+7/6/2026 15:50:18 [INFO] State changed: selected_target_index is now 2
+7/6/2026 15:50:18 [INFO] State changed: selected_target is now ('10.25.4.188', '98:E7:F4:03:63:2E', '', None)
+7/6/2026 15:50:59 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:51:2 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:51:2 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:51:2 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:51:5 [INFO] State changed: selected_target_index is now 2
+7/6/2026 15:51:5 [INFO] State changed: selected_target is now ('10.25.4.188', '98:E7:F4:03:63:2E', '', None)
+7/6/2026 15:51:5 [INFO] State changed: selected_source_index is now 2
+7/6/2026 15:51:5 [INFO] State changed: selected_source is now ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None)
+7/6/2026 15:52:23 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:52:27 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:52:27 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:52:27 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:52:28 [INFO] State changed: selected_target_index is now 2
+7/6/2026 15:52:28 [INFO] State changed: selected_target is now ('10.25.4.188', '98:E7:F4:03:63:2E', '', None)
+7/6/2026 15:52:29 [INFO] State changed: selected_source_index is now 1
+7/6/2026 15:52:29 [INFO] State changed: selected_source is now ('10.25.4.1', 'BC:24:11:6C:79:9A', '', None)
+7/6/2026 15:53:43 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:53:46 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:53:46 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:53:46 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:53:48 [INFO] State changed: selected_target_index is now 2
+7/6/2026 15:53:48 [INFO] State changed: selected_target is now ('10.25.4.188', '98:E7:F4:03:63:2E', '', None)
+7/6/2026 15:53:49 [INFO] State changed: selected_source_index is now 1
+7/6/2026 15:53:49 [INFO] State changed: selected_source is now ('10.25.4.1', 'BC:24:11:6C:79:9A', '', None)
+7/6/2026 15:54:17 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:54:20 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:54:20 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:54:20 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:54:26 [INFO] State changed: selected_target_index is now 3
+7/6/2026 15:54:26 [INFO] State changed: selected_target is now ('10.25.4.50', '44:A8:42:34:2D:09', '', None)
+7/6/2026 15:54:26 [INFO] State changed: selected_source_index is now 1
+7/6/2026 15:54:26 [INFO] State changed: selected_source is now ('10.25.4.1', 'BC:24:11:6C:79:9A', '', None)
+7/6/2026 15:54:55 [INFO] Network (quick_scan) scan started on 10.25.4.0/24 using iface: \\Device\\NPF_{3BEE12DF-1D22-4148-8F1F-2B0C0F5FDE4C}
+7/6/2026 15:54:59 [INFO] Network scan (quick_scan) completed on 10.25.4.0/24, 5 targets found
+7/6/2026 15:54:59 [INFO] Netowork scan target dropdown is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:54:59 [INFO] Netowork scan table is being updated with [('10.25.4.1', 'BC:24:11:6C:79:9A', '', None), ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None), ('10.25.4.188', '98:E7:F4:03:63:2E', '', None), ('10.25.4.50', '44:A8:42:34:2D:09', '', None), ('10.25.4.89', '24:5E:BE:07:3A:FC', '', None)]
+7/6/2026 15:55:1 [INFO] State changed: selected_target_index is now 1
+7/6/2026 15:55:1 [INFO] State changed: selected_target is now ('10.25.4.167', 'C4:65:16:B3:A7:F6', '', None)
+7/6/2026 15:55:2 [INFO] State changed: selected_source_index is now 1
+7/6/2026 15:55:2 [INFO] State changed: selected_source is now ('10.25.4.1', 'BC:24:11:6C:79:9A', '', None)
