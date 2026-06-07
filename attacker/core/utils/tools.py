@@ -163,11 +163,6 @@ def arp_spoofing_target(host_tupl, target_tupl, randomise_mac=False):
     if randomise_mac:
         host_mac = generate_MAC()
 
-    print("Aici in jos")
-    print(host_ip, host_mac)
-    print(target_ip, target_mac)
-    print(network_ip)
-
     # craft packet
     eth_l2 = Ether(src=host_mac, dst=target_mac)
     arp = ARP(op=2, pdst=target_ip, psrc=host_ip, hwdst=target_mac)

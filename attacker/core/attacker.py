@@ -31,6 +31,9 @@ root.title("Casper - Pentesting tool")
 default_font = font.nametofont("TkDefaultFont")
 default_font.config(family='Segoe UI', size=12)
 
+style = ttk.Style()
+style.configure('.', font=default_font)
+
 # get client OS
 state.client_details['os'] = platform.uname()[0]
 state.client_details['system_name'] = platform.uname()[1]

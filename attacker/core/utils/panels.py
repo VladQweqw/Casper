@@ -1,5 +1,6 @@
 import core.utils.helpers as helpers
 import core.utils.tools as tools
+import core.utils.attacks as attacks
 import core.utils.state as state
 from core.utils.logger import log
 
@@ -234,7 +235,7 @@ def arp_spoofing(content_frame, ttk):
 
     def scan_handler():
         
-        tools.arp_spoofing_target(
+        attacks.arp_spoofing_target(
             host_tupl=state.selected_source, 
             target_tupl=state.selected_target, 
             randomise_mac=var.get())
