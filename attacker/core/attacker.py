@@ -17,7 +17,7 @@ from tkinter import font
 import sv_ttk
 
 root = tk.Tk()
-sv_ttk.set_theme('dark')
+sv_ttk.set_theme('light')
 
 root.geometry(f"{APP_WIDTH}x{APP_HEIGHT}")
 root.minsize(APP_WIDTH, APP_HEIGHT)

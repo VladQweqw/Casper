@@ -23,7 +23,7 @@ def default(content_frame, ttk):
     textbox = ScrolledText(content_frame, wrap=tk.WORD, bd=0)
 
     textbox.tag_config('h1', font=helpers.title_font, justify='center')
-    textbox.tag_config('p', font=helpers.normal_font, foreground='#DADADA', justify='center')
+    textbox.tag_config('p', font=helpers.normal_font, foreground='#272829', justify='center')
     
     # Remove the scrollbar, basically remove it by None and then forget to render it ig
     textbox.config(yscrollcommand=None)
